@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Disease Model" id="Project-f30" database="MySql" >
+	<schema name="dimensional model" />
+	<schema name="disease model" >
+		<table name="disease" prior="disease_dim" >
+			<comment><![CDATA[This is the disease table displaying disease details.]]></comment>
+			<column name="disease_id" prior="disease id" type="INT" jt="4" mandatory="y" />
+			<column name="disease_name" prior="disease name" type="VARCHAR" length="100" jt="12" />
+			<column name="disease_type" prior="disease type" type="VARCHAR" length="100" jt="12" />
+			<column name="disease_description" prior="disease description" type="VARCHAR" length="100" jt="12" />
+			<column name="disease_duration" prior="disease duration" type="INT" jt="4" />
+			<index name="pk_disease" unique="PRIMARY_KEY" >
+				<column name="disease_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="disease symptom" prior="disease &amp; " >
+			<comment><![CDATA[This is a link table between two other link tables i.e., patient symptoms and patient disease.]]></comment>
+			<column name="disease_symptom_id" prior="disease symptom id" type="INT" jt="4" mandatory="y" />
+			<column name="disease id" type="INT" jt="4" />
+			<column name="symptom id" type="INT" jt="4" />
+			<index name="pk_disease symptom" unique="PRIMARY_KEY" >
+				<column name="disease_symptom_id" />
+			</index>
+			<fk name="fk_disease symptom_symptoms" to_schema="disease model" to_table="symptoms" >
+				<fk_column name="symptom id" pk="symptom_id" />
+			</fk>
+			<fk name="fk_disease symptom_disease" to_schema="disease model" to_table="disease" >
+				<fk_column name="disease id" pk="disease_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="hospital" prior="hospital_dim" >
+			<comment><![CDATA[This table provides information of the hospital.]]></comment>
+			<column name="hospital_id" prior="hospital id" type="INT" jt="4" mandatory="y" />
+			<column name="hospital_name" prior="hospital name" type="VARCHAR" length="100" jt="12" />
+			<column name="phone_number" prior="phone number" type="VARCHAR" length="100" jt="12" />
+			<column name="hospital_city" prior="hospital city" type="VARCHAR" length="100" jt="12" />
+			<column name="hospital_state" prior="hospital state" type="VARCHAR" length="100" jt="12" />
+			<column name="hospital_postal_code" prior="hospital postal code" type="VARCHAR" length="10" jt="12" />
+			<index name="pk_hospital" unique="PRIMARY_KEY" >
+				<column name="hospital_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="hospital insurance" prior="tbl" >
+			<comment><![CDATA[This is a link table between hospital and insurance tables.]]></comment>
+			<column name="hospital_insurance_id" prior="hospital insurance id" type="INT" jt="4" mandatory="y" />
+			<column name="hospital_id" prior="hospital id" type="INT" jt="4" />
+			<column name="insurance_id" prior="insurance id" type="INT" jt="4" />
+			<index name="pk_hospital insurance" unique="PRIMARY_KEY" >
+				<column name="hospital_insurance_id" />
+			</index>
+			<fk name="fk_hospital insurance_hospital" to_schema="disease model" to_table="hospital" >
+				<fk_column name="hospital_id" pk="hospital_id" />
+			</fk>
+			<fk name="fk_hospital insurance" to_schema="disease model" to_table="insurance" >
+				<fk_column name="insurance_id" pk="insurance_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="insurance" prior="insurance_dim" >
+			<comment><![CDATA[This is the insurance table displaying patient's insurance details]]></comment>
+			<column name="insurance_id" prior="insurance id" type="INT" jt="4" mandatory="y" />
+			<column name="insurance_type" prior="insurance type" type="VARCHAR" length="50" jt="12" />
+			<column name="insurance_company" prior="insurance company" type="VARCHAR" length="50" jt="12" />
+			<column name="policy_number" prior="policy number" type="NUMERIC" length="20" jt="2" />
+			<column name="start_date" prior="start date" type="DATE" jt="91" />
+			<column name="end_date" prior="end date" type="DATE" jt="91" />
+			<index name="pk_insurance" unique="PRIMARY_KEY" >
+				<column name="insurance_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="medication" prior="medication_dim" >
+			<comment><![CDATA[This table provides medication details of the patient]]></comment>
+			<column name="medication_id" prior="medication id" type="INT" jt="4" mandatory="y" />
+			<column name="medication_name" prior="medication name" type="VARCHAR" length="100" jt="12" />
+			<column name="medication_type" prior="medication type" type="VARCHAR" length="50" jt="12" />
+			<column name="medication_description" prior="medication description" type="VARCHAR" length="100" jt="12" />
+			<column name="dosage" type="INT" jt="4" />
+			<index name="pk_medication" unique="PRIMARY_KEY" >
+				<column name="medication_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="patient" prior="patient_fact" >
+			<comment><![CDATA[This is the patient table displaying patient details]]></comment>
+			<column name="patient_id" prior="patient id" type="INT" jt="4" mandatory="y" />
+			<column name="first_name" prior="first name" type="VARCHAR" length="100" jt="12" />
+			<column name="last_name" prior="last name" type="VARCHAR" length="100" jt="12" />
+			<column name="date_of_birth" prior="date of birth" type="DATE" jt="91" />
+			<column name="gender" type="VARCHAR" length="10" jt="12" />
+			<column name="email_address" prior="email address" type="VARCHAR" length="100" jt="12" />
+			<column name="street_address" prior="street address" type="VARCHAR" length="100" jt="12" />
+			<column name="city" type="VARCHAR" length="100" jt="12" />
+			<column name="state" type="VARCHAR" length="100" jt="12" />
+			<column name="postal_code" prior="postal code" type="VARCHAR" length="10" jt="12" />
+			<column name="contact_information" prior="contact information" type="NUMERIC" jt="2" />
+			<column name="medical_history" prior="medical history" type="VARCHAR" length="100" jt="12" />
+			<column name="severity_type" type="VARCHAR" length="100" jt="12" />
+			<column name="severity_score" type="VARCHAR" length="100" jt="12" />
+			<column name="diagnosis_month" type="VARCHAR" length="100" jt="12" />
+			<column name="len_of_hospital_stay" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_patient" unique="PRIMARY_KEY" >
+				<column name="patient_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="patient disease" prior="tbl" >
+			<comment><![CDATA[This is a link table between patient and disease tables.]]></comment>
+			<column name="patient_disease id" prior="patient id" type="INT" jt="4" mandatory="y" />
+			<column name="patient id" type="INT" jt="4" />
+			<column name="disease_id" type="INT" jt="4" />
+			<index name="pk_patient disease" unique="PRIMARY_KEY" >
+				<column name="patient_disease id" />
+			</index>
+			<fk name="fk_patient disease_patient" to_schema="disease model" to_table="patient" >
+				<fk_column name="patient id" pk="patient_id" />
+			</fk>
+			<fk name="fk_patient disease_disease" to_schema="disease model" to_table="disease" />
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="patient hospital" prior="tbl_0" >
+			<comment><![CDATA[This is patient hospital table]]></comment>
+			<column name="patient_hospital_id" type="INT" jt="4" mandatory="y" />
+			<column name="patient_id" type="INT" jt="4" />
+			<column name="hospital_id" type="INT" jt="4" />
+			<column name="patient_admission_date" prior="patient admission date" type="DATE" jt="91" />
+			<column name="patient_discharge_date" prior="patient discharge date" type="DATE" jt="91" />
+			<index name="pk_patient hospital" unique="PRIMARY_KEY" >
+				<column name="patient_hospital_id" />
+			</index>
+			<fk name="fk_patient hospital_hospital" to_schema="disease model" to_table="hospital" >
+				<fk_column name="hospital_id" pk="hospital_id" />
+			</fk>
+			<fk name="fk_patient hospital_patient" to_schema="disease model" to_table="patient" >
+				<fk_column name="patient_id" pk="patient_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="patient insurance" prior="patient_insurance" >
+			<comment><![CDATA[This is a link table between patient and insurance tables.]]></comment>
+			<column name="patient_insurance_id" type="INT" jt="4" mandatory="y" />
+			<column name="patient_id" type="INT" jt="4" />
+			<column name="insurance_id" type="INT" jt="4" />
+			<index name="pk_patient insurance" unique="PRIMARY_KEY" >
+				<column name="patient_insurance_id" />
+			</index>
+			<fk name="fk_patient insurance_patient" to_schema="disease model" to_table="patient" >
+				<fk_column name="patient_id" pk="patient_id" />
+			</fk>
+			<fk name="fk_patient insurance_insurance" to_schema="disease model" to_table="insurance" >
+				<fk_column name="insurance_id" pk="insurance_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="patient medication" prior="patient medication " >
+			<comment><![CDATA[This table is a link table between patient and medication tables.]]></comment>
+			<column name="patient_medication_id" prior="patient medication id" type="INT" jt="4" mandatory="y" />
+			<column name="patient_id" prior="patient id" type="INT" jt="4" />
+			<column name="medication_id" prior="medication id" type="INT" jt="4" />
+			<column name="doctor&#039;s_name" prior="doctor&#039;s name" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_patient medication" unique="PRIMARY_KEY" >
+				<column name="patient_medication_id" />
+			</index>
+			<fk name="fk_patient medication_patient" to_schema="disease model" to_table="patient" >
+				<fk_column name="patient_id" pk="patient_id" />
+			</fk>
+			<fk name="fk_patient medication" to_schema="disease model" to_table="medication" >
+				<fk_column name="medication_id" pk="medication_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="patient symptoms" prior="patient symptom" >
+			<comment><![CDATA[This is a link table between patient and symptoms tables.]]></comment>
+			<column name="patient symptoms id" type="INT" jt="4" mandatory="y" />
+			<column name="patient id" type="INT" jt="4" />
+			<column name="symptom_id" type="INT" jt="4" />
+			<index name="pk_patient symptoms" unique="PRIMARY_KEY" >
+				<column name="patient symptoms id" />
+			</index>
+			<fk name="fk_patient symptoms_symptoms" to_schema="disease model" to_table="symptoms" />
+			<fk name="fk_patient symptoms_patient" to_schema="disease model" to_table="patient" >
+				<fk_column name="patient id" pk="patient_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="symptoms" prior="symptoms_dim" >
+			<comment><![CDATA[This table has information on symptoms of the patient.]]></comment>
+			<column name="symptom_id" prior="symptom id" type="INT" jt="4" mandatory="y" />
+			<column name="symptom_name" prior="symptom name" type="VARCHAR" length="100" jt="12" />
+			<column name="symptom_1" type="INT" jt="4" />
+			<column name="symptom_2" type="INT" jt="4" />
+			<column name="symptom_3" type="INT" jt="4" />
+			<column name="total_symptoms" prior="total symptoms" type="INT" jt="4" />
+			<index name="pk_symptom" unique="PRIMARY_KEY" >
+				<column name="symptom_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl" />
+		<table name="tbl_0" />
+	</schema>
+	<connector name="PostgreSQL" database="PostgreSQL" host="localhost" port="1234" instance="disease" user="postgres" passwd="VGhlYmVhdGxlczEyIw==" />
+	<layout name="Default Layout" id="Layout-2669" show_relation="columns" >
+		<comment><![CDATA[Disease Model]]></comment>
+		<entity schema="disease model" name="disease" color="C1D8EE" x="48" y="736" />
+		<entity schema="disease model" name="disease symptom" color="C1D8EE" x="96" y="512" />
+		<entity schema="disease model" name="hospital" color="C1D8EE" x="1072" y="208" />
+		<entity schema="disease model" name="hospital insurance" color="C1D8EE" x="768" y="112" />
+		<entity schema="disease model" name="insurance" color="C1D8EE" x="384" y="80" />
+		<entity schema="disease model" name="medication" color="C1D8EE" x="1104" y="720" />
+		<entity schema="disease model" name="patient" color="C1D8EE" x="576" y="448" />
+		<entity schema="disease model" name="patient disease" color="C1D8EE" x="304" y="688" />
+		<entity schema="disease model" name="patient hospital" color="C1D8EE" x="928" y="464" />
+		<entity schema="disease model" name="patient insurance" color="C1D8EE" x="592" y="304" />
+		<entity schema="disease model" name="patient medication" color="C1D8EE" x="816" y="768" />
+		<entity schema="disease model" name="patient symptoms" color="C1D8EE" x="288" y="352" />
+		<entity schema="disease model" name="symptoms" color="C1D8EE" x="48" y="240" />
+		<group name="Group_" color="C4E0F9" >
+			<entity schema="disease model" name="patient insurance" />
+			<entity schema="disease model" name="hospital" />
+			<entity schema="disease model" name="patient hospital" />
+			<entity schema="disease model" name="patient" />
+			<entity schema="disease model" name="patient medication" />
+			<entity schema="disease model" name="medication" />
+			<entity schema="disease model" name="hospital insurance" />
+			<entity schema="disease model" name="insurance" />
+			<entity schema="disease model" name="symptoms" />
+			<entity schema="disease model" name="patient symptoms" />
+			<entity schema="disease model" name="disease symptom" />
+			<entity schema="disease model" name="patient disease" />
+			<entity schema="disease model" name="disease" />
+		</group>
+		<browser id="Browse-4fc" name="patient_hospital_id" confirm_updates="y" >
+			<browse_table schema="disease model" entity="patient hospital" x="20" y="20" width="400" height="300" />
+		</browser>
+	</layout>
+	<layout name="dimensional model" id="Layout-afa" show_relation="columns" />
+</project>

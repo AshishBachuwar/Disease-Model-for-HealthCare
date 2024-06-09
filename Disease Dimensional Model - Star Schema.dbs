@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="disease_dim_model" id="Project-257b" database="MySql" >
+	<schema name="disease_dim_model" >
+		<table name="disease_dim" prior="tbl" >
+			<column name="disease_id" type="INT" jt="4" />
+			<column name="disease_name" type="VARCHAR" length="100" jt="12" />
+			<column name="disease_type" type="VARCHAR" length="100" jt="12" />
+			<column name="disease_description" type="VARCHAR" length="1000" jt="12" />
+			<column name="disease_duration" type="VARCHAR" length="100" jt="12" />
+			<index name="unq_disease_dim_disease_id" unique="UNIQUE_KEY" >
+				<column name="disease_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="hospital_dim" prior="tbl" >
+			<column name="hospital_id" type="INT" jt="4" />
+			<column name="hospital_name" prior="h" type="INT" jt="4" />
+			<column name="phone_number" type="INT" jt="4" />
+			<column name="hospital_city" type="CHAR" length="100" jt="1" />
+			<column name="hospital_state" type="CHAR" length="100" jt="1" />
+			<column name="hospital_postal_code" type="CHAR" length="100" jt="1" />
+			<index name="unq_hospital_dim_hospital_id" unique="UNIQUE_KEY" >
+				<column name="hospital_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="insurance_dim" prior="tbl" >
+			<column name="insurance_id" type="INT" jt="4" />
+			<column name="insurance_type" type="INT" jt="4" />
+			<column name="insurance_company" type="INT" jt="4" />
+			<column name="policy_number" type="INT" jt="4" />
+			<column name="start_date" type="DATE" jt="91" />
+			<column name="end_date" type="DATE" jt="91" />
+			<index name="unq_insurance_dim_insurance_id" unique="UNIQUE_KEY" >
+				<column name="insurance_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="medication_dim" prior="tbl" >
+			<column name="medication_id" type="INT" jt="4" />
+			<column name="medication_name" type="VARCHAR" length="100" jt="12" />
+			<column name="medication_type" type="VARCHAR" length="100" jt="12" />
+			<column name="medication_description" type="VARCHAR" length="100" jt="12" />
+			<column name="dosage" type="INT" jt="4" />
+			<index name="unq_medication_dim_medication_id" unique="UNIQUE_KEY" >
+				<column name="medication_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="patient_dim" prior="tbl" >
+			<column name="patient_id" type="INT" jt="4" />
+			<column name="first_name" type="VARCHAR" length="100" jt="12" />
+			<column name="last_name" type="VARCHAR" length="100" jt="12" />
+			<column name="email_address" type="VARCHAR" length="100" jt="12" />
+			<column name="date_of_birth" type="DATE" jt="91" />
+			<column name="gender" type="DATE" jt="91" />
+			<column name="contact_information" type="DATE" jt="91" />
+			<column name="street_address" type="VARCHAR" length="100" jt="12" />
+			<column name="city" type="VARCHAR" length="100" jt="12" />
+			<column name="state" type="VARCHAR" length="100" jt="12" />
+			<column name="postal_code" type="VARCHAR" length="100" jt="12" />
+			<index name="unq_patient_dim_patient_id" unique="UNIQUE_KEY" >
+				<column name="patient_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="patient_fact" prior="pat" >
+			<column name="patient_id" type="INT" jt="4" />
+			<column name="symptom_id" type="INT" jt="4" />
+			<column name="disease_id" type="INT" jt="4" />
+			<column name="hospital_id" type="INT" jt="4" />
+			<column name="insurance_id" type="INT" jt="4" />
+			<column name="medication_id" type="INT" jt="4" />
+			<column name="length_of_hospital_stay" type="VARCHAR" length="1000" jt="12" />
+			<column name="severity_type" type="CHAR" length="1000" jt="1" />
+			<column name="severity_score" type="CHAR" length="100" jt="1" />
+			<column name="diagnosis_month" type="CHAR" length="100" jt="1" />
+			<column name="medical_history" type="VARCHAR" length="1000" jt="12" />
+			<fk name="fk_patient_fact_disease_dim" to_schema="disease_dim_model" to_table="disease_dim" >
+				<fk_column name="disease_id" pk="disease_id" />
+			</fk>
+			<fk name="fk_patient_fact_hospital_dim" to_schema="disease_dim_model" to_table="hospital_dim" >
+				<fk_column name="hospital_id" pk="hospital_id" />
+			</fk>
+			<fk name="fk_patient_fact_symptom_dim" to_schema="disease_dim_model" to_table="symptom_dim" >
+				<fk_column name="symptom_id" pk="symptom_id" />
+			</fk>
+			<fk name="fk_patient_fact_insurance_dim" to_schema="disease_dim_model" to_table="insurance_dim" >
+				<fk_column name="insurance_id" pk="insurance_id" />
+			</fk>
+			<fk name="fk_patient_fact_medication_dim" to_schema="disease_dim_model" to_table="medication_dim" >
+				<fk_column name="medication_id" pk="medication_id" />
+			</fk>
+			<fk name="fk_patient_fact_patient_dim" to_schema="disease_dim_model" to_table="patient_dim" >
+				<fk_column name="patient_id" pk="patient_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="symptom_dim" prior="symptom_id" >
+			<column name="symptom_id" prior="sympt" type="VARCHAR" length="100" jt="12" />
+			<column name="symptom_name" type="VARCHAR" length="100" jt="12" />
+			<column name="symptom_1" type="VARCHAR" length="100" jt="12" />
+			<column name="symptom_2" type="VARCHAR" length="100" jt="12" />
+			<column name="symptom_3" type="VARCHAR" length="100" jt="12" />
+			<column name="total_symptoms" type="VARCHAR" length="100" jt="12" />
+			<index name="unq_symptom_dim_symptom_id" unique="UNIQUE_KEY" >
+				<column name="symptom_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-1629" show_relation="columns" >
+		<entity schema="disease_dim_model" name="disease_dim" color="C1D8EE" x="96" y="512" />
+		<entity schema="disease_dim_model" name="hospital_dim" color="C1D8EE" x="384" y="48" />
+		<entity schema="disease_dim_model" name="insurance_dim" color="C1D8EE" x="816" y="192" />
+		<entity schema="disease_dim_model" name="medication_dim" color="C1D8EE" x="832" y="416" />
+		<entity schema="disease_dim_model" name="patient_dim" color="C1D8EE" x="544" y="608" />
+		<entity schema="disease_dim_model" name="patient_fact" color="C1D8EE" x="400" y="256" />
+		<entity schema="disease_dim_model" name="symptom_dim" color="C1D8EE" x="48" y="256" />
+	</layout>
+</project>
